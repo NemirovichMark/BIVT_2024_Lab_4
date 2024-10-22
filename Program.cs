@@ -25,7 +25,8 @@ public class Program
         //program.Task_1_27(new int[,] { { 1, 2, -3, 7, -5, 7, 7 }, { 5, 6, -7, 8, 9, 9, -11 }, { 9, 10, 11, 12, 13, 15, 15 }, { -13, 14, 25, 25, 16, 17, -19 }, { 0, 0, -1, -2, -3, -4, -6 } });
         //program.Task_1_30(new int[,] { { 1, 2, -3, 7, -5}, { 5, 6, -7, 8, 9 }, { 9, 10, 11, 12, 13 }, { -13, 14, 25, 25, 16 }, { 0, 0, -1, -2, -3 } });
         //program.Task_1_33(new int[,] { { 1, 2, -3, 7, -5, 7, 7 }, { 5, 6, -7, 8, 9, 9, -11 }, { 9, 10, 11, 12, 13, 15, 15 }, { -13, 14, 25, 25, 16, 17, -19 }, { -6, -5, -1, -2, -3, -4, -6 } });
-        program.Task_2_1(new double[,] { { 1, 2, -3, 7, -5, 7, 7 }, { 5, 6, -7, 8, 9, 9, -11 }, { 9, 10, 11, 12, 13, 15, 15 }, { -13, -30, 25, 25, 16, 17, -19 }, { -6, -5, -1, -2, -3, -4, -6 } });
+        //program.Task_2_1(new double[,] { { 1, 2, -3, 7, -5, 7, 7 }, { 5, 6, -7, 8, 9, 9, -11 }, { 9, 10, 11, 12, 13, 15, 15 }, { -13, -30, 25, 25, 16, 17, -19 }, { -6, -5, -1, -2, -3, -4, -6 } });
+        program.Task_2_2(new int[,] { { 1, 2, -3, 7, 7 }, { 5, 6, -7, 9, -11 }, { 9, 10, 11, 15, 15 }, { -13, 14, 25, 25, -19 }, { 5, 6, -7, 8, 9}, { -13, 14, 25, 25, -19 }, { 0, 0, -1, -2, -3 } });
     }
     //3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33
     #region Level 1 
@@ -489,29 +490,28 @@ public class Program
     public double[,] Task_2_1(double[,] A)
     {
         // code here
-        int m = A.GetLength(0), n = A.GetLength(1), index = -1;
+        int m = A.GetLength(0), n = A.GetLength(1), indexMax = -1, indexPrev = -1, indexPost = -1; 
         double max = -99999;
         if (m != 5 || n != 7)return null;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++)
-                if (A[i, j] > max ) { max = A[i, j]; index = j; }
-            if (index == n - 1)
-                if      (A[i, index - 1] < 0) A[i, index - 1] /= 2;
-                else if (A[i, index - 1] > 0) A[i, index - 1] *= 2;
-            if (index == 0)
-                if      (A[i, index + 1] < 0) A[i, index + 1] /= 2;
-                else if (A[i, index + 1] > 0) A[i, index + 1] *= 2;
-            if (index > 0 && index < n - 1){
-                if      (A[i, index-1] > A[i, index + 1])
-                    if      (A[i, index + 1] < 0) A[i, index + 1] /= 2;
-                    else if (A[i, index + 1] > 0) A[i, index + 1] *= 2;
-                else if(A[i, index - 1] < A[i, index + 1])
-                    if      (A[i, index - 1] < 0) A[i, index - 1] /= 2;
-                    else if (A[i, index - 1] > 0) A[i, index - 1] *= 2;
+                if (A[i, j] > max ) { max = A[i, j]; indexMax = j; }
+            if(indexMax == n){
+                if (A[i, indexPrev] > 0) A[i, indexPrev] *= 2;
+                else A[i, indexPrev] /= 2;
+            }else if(indexMax == 0) {
+                if (A[i, indexPost] > 0) A[i, indexPost] *= 2;
+                else A[i, indexPost] /= 2;
+            }else if(A[i, indexMax-1] > A[i, indexMax+1]){
+                if (A[i, indexMax + 1] > 0) A[i, indexMax + 1] *= 2;
+                else A[i, indexMax + 1] /= 2;
+            }else{
+                if (A[i, indexMax - 1] > 0) A[i, indexMax - 1] *= 2;
+                else A[i, indexMax - 1] /= 2;
             }
-            Console.WriteLine($"max: {max} | index: {index}");
+            //Console.WriteLine($"prev: {indexPrev} | max: {indexMax} | post: {indexPost}");
             max = -99999;
-            index = -1;    
+            indexMax  = -1;
         }
 
         for (int i = 0; i < m; i++){
@@ -527,9 +527,28 @@ public class Program
     public int[,] Task_2_2(int[,] A)
     {
         // code here
-
+        int m = A.GetLength(0), n = A.GetLength(1), index = -1, cPos = 0, cNeg = 0;
+        double max = -99999;
+        if (m != 7 || n != 5) return null;
+        for (int i = 0; i < n; i++){
+            for (int j = 0; j < m; j++) { 
+                if (A[j, i] > max) { max = A[j, i]; index = j; }
+                if (A[j, i] < 0) cNeg++;
+                if (A[j, i] > 0) cPos++;
+            }
+            if (cPos > cNeg) A[index, i] = 0;
+            if (cPos < cNeg) A[index, i] = index;
+            //Console.WriteLine($"index: {index} max: {max}");
+            max = -99999;
+            index = -1;
+        }
         // end
-
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+                Console.Write(A[j, i] + " ");
+            Console.WriteLine();
+        }
         return A;
     }
     public int[,] Task_2_3(int[,] A)
