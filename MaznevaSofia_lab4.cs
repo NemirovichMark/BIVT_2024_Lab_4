@@ -851,7 +851,7 @@ public class Program
             
             if (otri[j] > poli[j])
             {
-                A[inmx[j], j] = inmx[j];
+                A[inmx[j], j] = inmx[j]+1;
             }
             else
             {
@@ -980,7 +980,7 @@ public class Program
             }
             else
             {
-                A[inmax[j], j] = inmax[j];
+                A[inmax[j], j] = inmax[j]+1;
             }
         }
         // end
