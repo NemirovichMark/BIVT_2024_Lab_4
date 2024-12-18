@@ -596,10 +596,10 @@ public class Program
             int countOtr = 0;
             int max = -100;
             int indexmax = -1;
-            for (int i = 1; i < A.GetLength(0); i++)
+            for (int i = 0; i < A.GetLength(0); i++)
             {
-                if (A[i, j] >= 0) countPol++;
-                else countOtr++;
+                if (A[i, j] > 0) countPol++;
+                else if (A[i, j] < 0) countOtr++;
                 if (A[i, j] > max)
                 {
                     max = A[i, j];
@@ -610,7 +610,7 @@ public class Program
             {
                 A[indexmax, j] = 0;
             }
-            else A[indexmax, j] = indexmax;
+            else A[indexmax, j] = indexmax + 1;
         }
         // end
 
@@ -682,7 +682,7 @@ public class Program
             if (max < sum)
                 A[indexmax, j] = sum;
             else
-                A[indexmax, j] = indexmax;
+                A[indexmax, j] = indexmax + 1;
         }
         // end
 
@@ -921,22 +921,28 @@ public class Program
                 }
             }
         }
-        for (int i = 0; i < matrix.GetLength(0); i++)
+        for (int i = 1; i < matrix.GetLength(0); i++)
         {
-            for (int j = i + 1; j < matrix.GetLength(1); j++)
+            int count = pos[i];
+            int[] array = new int[5];
+            for (int k = 0; k < matrix.GetLength(1); k++)
             {
-                if (pos[i] < pos[j])
+                array[k] = matrix[i, k];
+            }
+            int j = i - 1;
+            while (j >= 0 && pos[j] < count)
+            {
+                pos[j + 1] = pos[j];
+                for (int k = 0; k < matrix.GetLength(1); k++)
                 {
-                    for (int k = 0; k < matrix.GetLength(1); k++)
-                    {
-                        int temp = matrix[i, k];
-                        matrix[i, k] = matrix[j, k];
-                        matrix[j, k] = temp;
-                    }
-                    int temp1 = pos[i];
-                    pos[i] = pos[j];
-                    pos[j] = temp1;
+                    matrix[j + 1, k] = matrix[j, k];
                 }
+                j--;
+            }
+            pos[j + 1] = count;
+            for (int k = 0; k < matrix.GetLength(1); k++)
+            {
+                matrix[j + 1, k] = array[k];
             }
         }
         // end
