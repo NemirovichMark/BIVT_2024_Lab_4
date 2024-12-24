@@ -972,36 +972,30 @@ public class Program
         // code here
         int n = matrix.GetLength(0), m = matrix.GetLength(1);
         if (n < 2) return null;
-
-        int nonZero = 0;
-        for (int i = 0; i < n; i++){
-            short zeros = 0;
-
+    
+        int nZeroLines = 0;
+        for (int i = 0; i < n; i++)
+        {
+            bool zeros = false;
+    
             for (int j = 0; j < m; j++)
-                if (matrix[i, j] == 0){ zeros = 1; break; }
-
-            if (zeros == 1)
-                nonZero++;
+                if (matrix[i, j] == 0) { zeros = true; matrix[i, 0] = 0; break; }
+    
+            if (!zeros)
+                nZeroLines++;
         }
-
-        int[,] newMatrix = new int[nonZero, m];
-        int row = 0;
-
-        for (int i = 0; i < n; i++){
-            short zeros = 1;
+    
+        int[,] newMatrix = new int[nZeroLines, m];
+    
+        for (int i = 0, k = -1; i < n; i++)
+        {
+            if (matrix[i, 0] == 0) continue;
+            else k++;
             for (int j = 0; j < m; j++)
-                if (matrix[i, j] == 0){ zeros = 1; break; }
-
-            if (zeros == 1){
-                for (int j = 0; j < m; j++)
-                    newMatrix[row, j] = matrix[i, j];
-
-                row++;
-            }
+                newMatrix[k, j] = matrix[i, j];
         }
         matrix = newMatrix;
-        // end
-
+    
         return matrix;
     }
     #endregion
