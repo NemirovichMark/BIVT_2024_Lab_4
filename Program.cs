@@ -51,7 +51,15 @@ public class Program
                 { -13,  0,      25,     25,     16,     0,      -19 },
                 { -6,   -5,     -1,     -2,     -3,     -4,     0 }
             };
-        program.Task_3_11(D);
+        //program.Task_3_11(D);
+        int[,] E = {
+                { 1, 2, -3, 7, 7 },
+                { 9, 10, 11, 15, 15 },
+                { -13, 14, 25, 25, -19 },
+                { 5, 6, -7, 8, 9 },
+                { 0, 0, -1, -2, -3 }
+            };
+        program.Task_3_4(E);
 
     }
 
@@ -921,7 +929,7 @@ public class Program
         int n = matrix.GetLength(0);
         if (n % 2 != 0)
         {
-            for (int i = 0;i< n; i++)
+            for (int i = n/2; i < n; i++)
             {
                 for (int j = 0; j < i+1; j++)
                 {
@@ -931,13 +939,27 @@ public class Program
         }
         else
         {
-            for (int i = 1; i < n; i++)
+            for (int i = n/2 - 1; i < n; i++)
             {
-                for (int j = 0; j <= i - 1; j++)
+                for (int j = 0; j <= i + 1; j++)
                 {
                     matrix[i, j] = 1;
                 }
             }
+        }
+        Console.WriteLine(n/2);
+        Print(matrix);
+        void Print(int[,] L)
+        {
+            for (int i = 0; i < L.GetLength(0); i++)
+            {
+                for (int j = 0; j < L.GetLength(1); j++)
+                {
+                    Console.Write($"{L[i, j]}  ");
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
         }
         // end
 
